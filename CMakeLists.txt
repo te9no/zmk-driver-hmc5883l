@@ -1,0 +1,2 @@
+zephyr_library()
+zephyr_library_sources_ifdef(CONFIG_INPUT_HMC5883L drivers/input/input_hmc5883l.c)

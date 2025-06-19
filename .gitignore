@@ -1,0 +1,8 @@
+sample/drivers/sensor/honeywell/CMakeLists.txt
+sample/drivers/sensor/honeywell/Kconfig
+sample/drivers/sensor/honeywell/hmc5883l/CMakeLists.txt
+sample/drivers/sensor/honeywell/hmc5883l/hmc5883l_trigger.c
+sample/drivers/sensor/honeywell/hmc5883l/hmc5883l.c
+sample/drivers/sensor/honeywell/hmc5883l/hmc5883l.h
+sample/drivers/sensor/honeywell/hmc5883l/Kconfig
+sample/dts/bindings/sensor/honeywell,hmc5883l.yaml

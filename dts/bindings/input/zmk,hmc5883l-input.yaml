@@ -1,0 +1,14 @@
+# Copyright (c) 2023 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+description: ZMK HMC5883L 3-axis magnetometer input device
+
+compatible: "zmk,hmc5883l-input"
+
+include: [i2c-device.yaml]
+
+properties:
+  polling-interval-ms:
+    type: int
+    default: 10
+    description: Polling interval for reading sensor data in milliseconds

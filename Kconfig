@@ -1,0 +1,29 @@
+config INPUT_HMC5883L
+	bool "HMC5883L magnetometer input driver"
+	default y
+	depends on DT_HAS_ZMK_HMC5883L_INPUT_ENABLED
+	help
+	  Enable driver for HMC5883L magnetometer sensor.
+	  This driver reads magnetometer data and converts it to mouse movement and scroll events.
+
+if INPUT_HMC5883L
+
+config INPUT_HMC5883L_POLLING_INTERVAL_MS
+	int "Polling interval in milliseconds"
+	default 10
+	range 1 1000
+	help
+	  Polling interval for reading sensor data in milliseconds.
+
+config INPUT_HMC5883L_Z_THRESHOLD
+	int "Z-axis threshold for scroll detection"
+	default 5
+	range 1 100
+	help
+	  Threshold value for Z-axis movement to trigger scroll events.
+
+module = INPUT_HMC5883L
+module-str = hmc5883l
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # INPUT_HMC5883L
