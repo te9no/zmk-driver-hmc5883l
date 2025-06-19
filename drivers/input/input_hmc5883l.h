@@ -35,6 +35,10 @@
 #define DEADZONE_Y                      3
 #define DEADZONE_Z                      5
 
+/* Debug Bar Graph Constants */
+#define BAR_GRAPH_WIDTH                 40
+#define BAR_GRAPH_SCALE                 100
+
 struct hmc5883l_config {
     struct i2c_dt_spec i2c;
     uint32_t polling_interval_ms;

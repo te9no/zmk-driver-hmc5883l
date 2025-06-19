@@ -12,10 +12,27 @@
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 #include <zephyr/sys/byteorder.h>
+#include <zephyr/sys/util.h>
+#include <stdlib.h>
 
 #include "input_hmc5883l.h"
 
 LOG_MODULE_REGISTER(hmc5883l, CONFIG_INPUT_HMC5883L_LOG_LEVEL);
+
+static void hmc5883l_draw_bar_graph(int16_t value, char *buffer, int buffer_size)
+{
+    int normalized_value = (value + BAR_GRAPH_SCALE/2) * BAR_GRAPH_WIDTH / BAR_GRAPH_SCALE;
+    normalized_value = CLAMP(normalized_value, 0, BAR_GRAPH_WIDTH);
+    
+    int i;
+    for (i = 0; i < normalized_value && i < (buffer_size - 1); i++) {
+        buffer[i] = '#';  /* Use ASCII character instead of Unicode */
+    }
+    for (; i < BAR_GRAPH_WIDTH && i < (buffer_size - 1); i++) {
+        buffer[i] = '.';  /* Use ASCII character instead of Unicode */
+    }
+    buffer[i] = '\0';
+}
 
 static int hmc5883l_read_sensor(const struct device *dev, int16_t *x, int16_t *y, int16_t *z)
 {
@@ -33,6 +50,23 @@ static int hmc5883l_read_sensor(const struct device *dev, int16_t *x, int16_t *y
     *x = sys_be16_to_cpu((buf[0] << 8) | buf[1]);
     *z = sys_be16_to_cpu((buf[2] << 8) | buf[3]);
     *y = sys_be16_to_cpu((buf[4] << 8) | buf[5]);
+
+    /* Debug output with bar graphs */
+    if (IS_ENABLED(CONFIG_INPUT_HMC5883L_DEBUG_BAR_GRAPH)) {
+        char x_bar[BAR_GRAPH_WIDTH + 1];
+        char y_bar[BAR_GRAPH_WIDTH + 1];
+        char z_bar[BAR_GRAPH_WIDTH + 1];
+        
+        hmc5883l_draw_bar_graph(*x, x_bar, sizeof(x_bar));
+        hmc5883l_draw_bar_graph(*y, y_bar, sizeof(y_bar));
+        hmc5883l_draw_bar_graph(*z, z_bar, sizeof(z_bar));
+        
+        LOG_DBG("Sensor readings:");
+        LOG_DBG("X:%6d [%s]", *x, x_bar);
+        LOG_DBG("Y:%6d [%s]", *y, y_bar);
+        LOG_DBG("Z:%6d [%s]", *z, z_bar);
+        LOG_DBG("────────────────────────────────────────────────");
+    }
 
     return 0;
 }

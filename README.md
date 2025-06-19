@@ -69,6 +69,10 @@ CONFIG_INPUT_HMC5883L=y
 CONFIG_INPUT_HMC5883L_POLLING_INTERVAL_MS=10
 CONFIG_INPUT_HMC5883L_Z_THRESHOLD=5
 
+# Debug options (optional)
+CONFIG_INPUT_HMC5883L_LOG_LEVEL_DBG=y
+CONFIG_INPUT_HMC5883L_DEBUG_BAR_GRAPH=y
+
 # I2C support
 CONFIG_I2C=y
 
@@ -83,6 +87,8 @@ CONFIG_INPUT=y
 - `CONFIG_INPUT_HMC5883L`: Enable the driver (default: y)
 - `CONFIG_INPUT_HMC5883L_POLLING_INTERVAL_MS`: Polling interval (default: 10ms)
 - `CONFIG_INPUT_HMC5883L_Z_THRESHOLD`: Z-axis scroll detection threshold (default: 5)
+- `CONFIG_INPUT_HMC5883L_DEBUG_BAR_GRAPH`: Enable bar graph debug output (default: n)
+- `CONFIG_INPUT_HMC5883L_LOG_LEVEL_DBG`: Enable debug logging (default: n)
 
 ### Device Tree Properties
 
@@ -158,13 +164,27 @@ hmc5883l_input: hmc5883l@1e {
 
 ### Operation Verification
 
-1. **Check log output**:
+1. **Enable debug logging**:
    ```
    CONFIG_INPUT_HMC5883L_LOG_LEVEL_DBG=y
    ```
 
-2. **Sensor initialization**: Chip ID verification message appears at startup
-3. **Calibration**: Calibration completion message appears after 30 seconds
+2. **Enable bar graph debug output**:
+   ```
+   CONFIG_INPUT_HMC5883L_DEBUG_BAR_GRAPH=y
+   ```
+   
+   This will display sensor readings as ASCII bar graphs:
+   ```
+   Sensor readings:
+   X:   120 [###########.............................]
+   Y:   -45 [##########..............................]
+   Z:    89 [############............................]
+   ────────────────────────────────────────────────
+   ```
+
+3. **Sensor initialization**: Chip ID verification message appears at startup
+4. **Calibration**: Calibration completion message appears after 30 seconds
 
 ## Hardware Wiring
 
